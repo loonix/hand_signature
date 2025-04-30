@@ -23,9 +23,6 @@ ValueNotifier<ByteData?> rawImage = ValueNotifier<ByteData?>(null);
 ValueNotifier<ByteData?> rawImageFit = ValueNotifier<ByteData?>(null);
 
 class MyApp extends StatelessWidget {
-  bool get scrollTest => false;
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,11 +30,23 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(
-        backgroundColor: Colors.orange,
-        body: scrollTest
-            ? ScrollTest()
-            : SafeArea(
+      home: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          backgroundColor: Colors.orange,
+          appBar: AppBar(
+            bottom: const TabBar(
+              tabs: [
+                Tab(text: 'Standard Demo'),
+                Tab(text: 'Scroll Test'),
+              ],
+            ),
+            title: const Text('Signature Demo'),
+          ),
+          body: TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              SafeArea(
                 child: Stack(
                   children: <Widget>[
                     Column(
@@ -126,6 +135,10 @@ class MyApp extends StatelessWidget {
                   ],
                 ),
               ),
+              const ScrollTest(),
+            ],
+          ),
+        ),
       ),
     );
   }

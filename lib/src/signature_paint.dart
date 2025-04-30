@@ -73,15 +73,24 @@ class _HandSignaturePaintState extends State<HandSignaturePaint> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: PathSignaturePainter(
-        paths: widget.control.paths,
-        color: widget.color,
-        width: widget.strokeWidth,
-        maxWidth: widget.maxStrokeWidth,
-        type: widget.type,
-        onSize: widget.onSize,
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Handle size changes at widget level
+        if (widget.onSize != null) {
+          widget.onSize!(constraints.biggest);
+        }
+        
+        return CustomPaint(
+          size: constraints.biggest,
+          painter: PathSignaturePainter(
+            paths: widget.control.paths,
+            color: widget.color,
+            width: widget.strokeWidth,
+            maxWidth: widget.maxStrokeWidth,
+            type: widget.type,
+          ),
+        );
+      },
     );
   }
 

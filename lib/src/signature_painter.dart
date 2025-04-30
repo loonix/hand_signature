@@ -28,10 +28,6 @@ class PathSignaturePainter extends CustomPainter {
   /// Maximal size of path.
   final double maxWidth;
 
-  //TODO: remove this and move size changes to Widget side..
-  /// Callback when canvas size is changed.
-  final bool Function(Size size)? onSize;
-
   /// Type of signature path.
   final SignatureDrawType type;
 
@@ -54,19 +50,11 @@ class PathSignaturePainter extends CustomPainter {
     this.color = Colors.black,
     this.width = 1.0,
     this.maxWidth = 10.0,
-    this.onSize,
     this.type = SignatureDrawType.shape,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    //TODO: move to widget/state
-    if (onSize != null) {
-      if (onSize!.call(size)) {
-        return;
-      }
-    }
-
     if (paths.isEmpty) {
       return;
     }
@@ -119,8 +107,12 @@ class PathSignaturePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
+  bool shouldRepaint(PathSignaturePainter oldDelegate) {
+    return oldDelegate.paths != paths ||
+           oldDelegate.color != color ||
+           oldDelegate.width != width ||
+           oldDelegate.maxWidth != maxWidth ||
+           oldDelegate.type != type;
   }
 }
 
